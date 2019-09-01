@@ -50,4 +50,4 @@ rabbitmq:                     #本地环境不需要配置mq
     username: guest
     password: guest
 
-test: 1111 world
+test: hello world
