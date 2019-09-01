@@ -1,0 +1,52 @@
+server:
+  port: 8006
+  
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+logging:
+  level:
+    org.springframework.cloud.gateway: trace
+    org.springframework.http.server.reactive: debug
+    org.springframework.web.reactive: debug
+    reactor.ipc.netty: debug
+    
+eureka:
+  instance:
+    hostname: ${spring.cloud.client.ipAddress}
+    instanceId: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+
+zuul:
+  routes:
+    api:
+      path: /api/** #指定请求基础地址，其中 API 可以是任何字符。
+      serviceId: demo1 #serviceId：转发到的服务 ID，也就是指定服务的 application.name，上述实例的含义表示只要包含 /api/ 的地址，都自动转发到 eurekaclient 的服务去。
+
+management:                    #SpringCloud 1.5版本暴露接口，暴露/bus-refresh接口
+  security:
+    enabled: false
+  endpoints:                  #SpringCloud 2.0.0版本以后暴露接口方式
+    web:
+      exposure:
+        include: "*"
+ 
+#security:                       #是否开启基本的鉴权，默认为true
+#  basic:
+#    enabled: false
+
+rabbitmq:                     #本地环境不需要配置mq
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+test: hello world
